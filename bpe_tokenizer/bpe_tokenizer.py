@@ -1,10 +1,12 @@
 class BPE_Tokenizer:
     def __init__(self):
+        self.seperating_char = '$'
         self.filename = ""
         self.word_freq_pairs = []
         # assuming the vocabulary is english
-        self.vocabulary = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-                           'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '_'}
+        self.vocabulary = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
+                           'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+                           's', 't', 'u', 'v', 'w', 'x', 'y', 'z', self.seperating_char}
         self.merge_rules = []
         self.n_merges = 0
 
@@ -16,7 +18,8 @@ class BPE_Tokenizer:
                     tmp_map[word] += 1
                 else:
                     tmp_map[word] = 1
-        self.word_freq_pairs.extend([[[*word+'_'], freq] for word, freq in tmp_map.items()])
+        self.word_freq_pairs.extend([[[*word+self.seperating_char], freq]
+                                     for word, freq in tmp_map.items()])
 
     def __iter_vocabulary(self):
         tmp_map = dict()
@@ -61,17 +64,54 @@ class BPE_Tokenizer:
         for _ in range(self.n_merges):
             self.__iter_vocabulary()
 
+    def save_vocabulary(self, filename):
+        with open(filename, "w") as file:
+            for word in self.vocabulary:
+                if word[-1] == self.seperating_char:
+                    if len(word[:-1]) == 0: continue
+                    file.write(word[:-1]+"\n")
+                else:
+                    file.write(word+"\n")
+            
     def save_merge_rules(self, filename):
         with open(filename, "w") as file:
             for merge_rule in self.merge_rules:
                 file.write(f"{merge_rule[0]},{merge_rule[1]}\n")
-        
-    def debug(self):
-        print(self.word_freq_pairs[:100])
-        print(self.vocabulary)
 
+    def tokenize_line(self, line):
+        tokenized_words = [[*word+self.seperating_char] for word in line.split()]
+        for merge_rule in self.merge_rules:
+            rule = "".join(merge_rule)
+            for i in range(len(tokenized_words)):
+                word = tokenized_words[i]
+                if len(word) == 1: continue 
+                new_word = []
+                j = 0
+                while j < len(word):            
+                    tmp = "".join(word[j:j+2])
+                    if tmp == rule:
+                        new_word.append(tmp)
+                        j += 2
+                    else:
+                        new_word.append(word[j])
+                        j += 1
+                tokenized_words[i] = new_word
+        return tokenized_words
+
+    def __flatten(self, data):
+        res = []
+        for x in data:
+            res.extend(x)
+        return res
+
+    def tokenize(self, filename, outfilename):
+        with open(filename, "r") as in_file, open(outfilename, "w") as out_file:
+            for line in in_file.readlines():
+                out_file.write(",".join(self.__flatten(self.tokenize_line(line)))+"\n")
+                
 if __name__ == "__main__":
     bpe_tokenizer = BPE_Tokenizer()
-    bpe_tokenizer.learn_vocabulary("../dataset/corpus.txt", 500)
+    bpe_tokenizer.learn_vocabulary("../dataset/corpus.txt", 100)
     bpe_tokenizer.save_merge_rules("tests/merge_rules.txt")
-    bpe_tokenizer.debug()
+    bpe_tokenizer.save_vocabulary("tests/vocabulary.txt")
+    bpe_tokenizer.tokenize("tests/naked_by_james_arthur.txt", "tests/tokenized_naked_by_james_arthur.txt")

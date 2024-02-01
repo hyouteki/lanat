@@ -24,4 +24,22 @@ class BPE_Tokenizer:
 		''' saves the learnt merge_rules to a file in order '''
 		Attributes:
 			filename (str): path at which the merge_rules will be stored
+
+	def save_vocabulary(self, filename):
+		''' saves the vocabulary to a file '''
+		Attributes:
+			filename (str): path at which the vocabulary will be stored
+
+	def tokenize_line(self, line):
+		''' tokenizes the line based on the learnt merge_rules '''
+		Attributes:
+			line (str): line to tokenize
+		Returns:
+			tokenized_line (list[list[str]]): tokenized_line
+
+	def tokenize(self, filename, outfilename):
+		''' tokenizes the file and stores it to a different file '''
+		Attributes:
+			filename (str): file to tokenize
+			outfilename (str): file that will store the tokenized_file
 ```
