@@ -36,19 +36,17 @@ class BPE_Tokenizer:
         self.vocabulary.add(max_comb_val)
         for i in range(len(self.word_freq_pairs)):
             word, freq = self.word_freq_pairs[i]
-            if len(word) == 1: continue
+            if len(word) == 1: continue 
             new_word = []
             j = 0
-            while j < len(word)-1:            
+            while j < len(word):            
                 tmp = "".join(word[j:j+2])
                 if tmp == max_comb_val:
                     new_word.append(tmp)
                     j += 2
-                    continue
-                new_word.append(word[j])
-                if j == len(word)-2:
-                    new_word.append(word[j+1])
-                j += 1
+                else:
+                    new_word.append(word[j])
+                    j += 1
             self.word_freq_pairs[i][0] = new_word
                 
     def __build(self):
@@ -61,5 +59,5 @@ class BPE_Tokenizer:
         print(self.vocabulary)
 
 if __name__ == "__main__":
-    bpe_tokenizer = BPE_Tokenizer("../corpus.txt", 100)
+    bpe_tokenizer = BPE_Tokenizer("../dataset/corpus.txt", 500)
     bpe_tokenizer.debug()
