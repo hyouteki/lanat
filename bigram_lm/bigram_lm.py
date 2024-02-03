@@ -44,8 +44,60 @@ class Bigram_LM:
             # TODO: need to add laplace or some other kind of softening \
             #    algorithm to deal with zero probability
             return 0
+
+    def laplace_unigram_probability(self, unigram):
+        if unigram in self.unigram_counts:
+            prob = self.unigram_counts[unigram] + 1
+            words = sum([count for _, count in self.unigram_counts.items()]) + len(self.unigram_counts)
+            return prob/words
+        else:
+            prob = 1
+            words = sum([count for _, count in self.unigram_counts.items()]) + len(self.unigram_counts)
+            return prob/words
+    
+    def laplace_bigram_probability_given_first_word(self, bigram):
+        if bigram in self.bigram_counts:
+            prob = self.bigram_counts[bigram] + 1
+            words = sum([self.bigram_counts[(bigram[0], word2)] + 1
+                         for word2 in self.bigrams[bigram[0]]]) + len(self.unigram_counts)
+            return prob/words
+        else:
+            prob = 1
+            words = sum([self.bigram_counts[(bigram[0], word2)] + 1
+                         for word2 in self.bigrams[bigram[0]]]) + len(self.unigram_counts)
+            return prob/words
+
+    
+    def kneser_ney_unigram_probability(self, unigram):
+            total_unigrams = sum(self.unigram_counts.values())
+            prob = max(self.unigram_counts[unigram] - 0.5, 0) / total_unigrams
+            return prob
+
+    def kneser_ney_bigram_probability_given_first_word(self, bigram):
+        continuation_count = sum(1 for w2 in self.bigram_counts if w2[0] == bigram[0])
+
+        discount = 0.75
+        alpha_factor = discount / self.unigram_counts[bigram[0]]
+
+        prob = max(self.bigram_counts[bigram] - discount, 0) / self.unigram_counts[bigram[0]]
+        prob += (alpha_factor * continuation_count)
+        return prob
     
         
+    def laplace_sentence_probability(self, sentence):
+        prob = self.laplace_unigram_probability(sentence[0])
+        for i in range(len(sentence)-1):
+            bigram = (sentence[i], sentence[i+1])
+            prob *= self.laplace_bigram_probability_given_first_word(bigram)
+        return prob
+    
+    def kneser_ney_sentence_probability(self, sentence):
+        prob = self.kneser_ney_unigram_probability(sentence[0])
+        for i in range(len(sentence)-1):
+            bigram = (sentence[i], sentence[i+1])
+            prob *= self.kneser_ney_bigram_probability_given_first_word(bigram)
+        return prob
+
     def sentence_probability(self, sentence):
         prob = self.unigram_probability(sentence[0])
         for i in range(len(sentence)-1):
@@ -66,3 +118,5 @@ if __name__ == "__main__":
     print(bigram_lm.bigram_counts)
     print(bigram_lm.bigrams)
     print(bigram_lm.sentence_probability("This is a  dog".split()))
+    print(bigram_lm.laplace_sentence_probability("This is a  dog".split()))
+    print(bigram_lm.kneser_ney_sentence_probability("This is a  dog".split()))
