@@ -46,32 +46,19 @@ class Bigram_LM:
             return 0
 
     def laplace_unigram_probability(self, unigram):
-        if unigram in self.unigram_counts:
-            prob = self.unigram_counts[unigram] + 1
-            words = sum([count for _, count in self.unigram_counts.items()]) + len(self.unigram_counts)
-            return prob/words
-        else:
-            prob = 1
-            words = sum([count for _, count in self.unigram_counts.items()]) + len(self.unigram_counts)
-            return prob/words
+        prob = 1 + (self.unigram_counts[unigram] if unigram in self.unigram_counts else 0)
+        words = sum([count+1 for _, count in self.unigram_counts.items()])
+        return prob/words
     
     def laplace_bigram_probability_given_first_word(self, bigram):
-        if bigram in self.bigram_counts:
-            prob = self.bigram_counts[bigram] + 1
-            words = sum([self.bigram_counts[(bigram[0], word2)] + 1
-                         for word2 in self.bigrams[bigram[0]]]) + len(self.unigram_counts)
-            return prob/words
-        else:
-            prob = 1
-            words = sum([self.bigram_counts[(bigram[0], word2)] + 1
-                         for word2 in self.bigrams[bigram[0]]]) + len(self.unigram_counts)
-            return prob/words
-
+        prob = 1 + (if bigram in self.bigram_counts self.bigram_counts[bigram] else 0)
+        words = sum([self.bigram_counts[(bigram[0], word2)]+1 for word2 in self.bigrams[bigram[0]]])
+        return prob/words
     
     def kneser_ney_unigram_probability(self, unigram):
-            total_unigrams = sum(self.unigram_counts.values())
-            prob = max(self.unigram_counts[unigram] - 0.5, 0) / total_unigrams
-            return prob
+        total_unigrams = sum(self.unigram_counts.values())
+        prob = max(self.unigram_counts[unigram] - 0.5, 0) / total_unigrams
+        return prob
 
     def kneser_ney_bigram_probability_given_first_word(self, bigram):
         continuation_count = sum(1 for w2 in self.bigram_counts if w2[0] == bigram[0])
