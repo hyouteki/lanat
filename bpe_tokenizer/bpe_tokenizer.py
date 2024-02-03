@@ -92,7 +92,7 @@ class BPE_Tokenizer:
                         new_word.append(word[j])
                         j += 1
                 tokenized_words[i] = new_word
-        return tokenized_words
+        return self.__flatten(tokenized_words)
 
     def __flatten(self, data):
         res = []
@@ -103,11 +103,15 @@ class BPE_Tokenizer:
     def tokenize(self, filename, outfilename):
         with open(filename, "r") as in_file, open(outfilename, "w") as out_file:
             for line in in_file.readlines():
-                out_file.write(",".join(self.__flatten(self.tokenize_line(line)))+"\n")
-                
+                out_file.write(",".join(self.tokenize_line(line))+"\n")
+
+    def tokenize_from_data(self, data):
+        return [self.tokenize_line(line) for line in data]
+
+my_bpe_tokenizer = BPE_Tokenizer()
+my_bpe_tokenizer.learn_vocabulary("../dataset/corpus.txt", 200)
+
 if __name__ == "__main__":
-    bpe_tokenizer = BPE_Tokenizer()
-    bpe_tokenizer.learn_vocabulary("../dataset/corpus.txt", 100)
-    bpe_tokenizer.save_merge_rules("tests/merge_rules.txt")
-    bpe_tokenizer.save_vocabulary("tests/vocabulary.txt")
-    bpe_tokenizer.tokenize("tests/naked_by_james_arthur.txt", "tests/tokenized_naked_by_james_arthur.txt")
+    my_bpe_tokenizer.save_merge_rules("tests/merge_rules.txt")
+    my_bpe_tokenizer.save_vocabulary("tests/vocabulary.txt")
+    my_bpe_tokenizer.tokenize("tests/naked_by_james_arthur.txt", "tests/tokenized_naked_by_james_arthur.txt")

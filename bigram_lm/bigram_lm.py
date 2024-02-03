@@ -1,10 +1,15 @@
+import sys
+sys.path.append('../bpe_tokenizer')
+
+from bpe_tokenizer import my_bpe_tokenizer
+ 
 class Bigram_LM:
     def __init__(self):
         self.tokenized_data = []
         self.unigram_counts = dict()
         self.bigram_counts = dict()
         self.bigrams = dict()
-
+        
     def learn(self, tokenized_data):
         self.tokenized_data.extend(tokenized_data)
         for line in tokenized_data:
@@ -45,24 +50,25 @@ class Bigram_LM:
             #    algorithm to deal with zero probability
             return 0
     
-        
     def sentence_probability(self, sentence):
         prob = self.unigram_probability(sentence[0])
         for i in range(len(sentence)-1):
             bigram = (sentence[i], sentence[i+1])
             prob *= self.bigram_probability_given_first_word(bigram)
         return prob
-        
                         
 if __name__ == "__main__":
-    data = ["This is a  dog",
-            "This is a cat",
-            "I love my cat",
-            "This is my name "]
-    tokenized_data = [line.split() for line in data]
+    data = ["this is a  dog",
+            "this is a cat",
+            "i love my cat",
+            "this is my name "]
+    tokenized_data = my_bpe_tokenizer.tokenize_from_data(data)
+    print(tokenized_data)
     bigram_lm = Bigram_LM()
     bigram_lm.learn(tokenized_data)
     print(bigram_lm.unigram_counts)
     print(bigram_lm.bigram_counts)
     print(bigram_lm.bigrams)
-    print(bigram_lm.sentence_probability("This is a  dog".split()))
+    test_sentence = my_bpe_tokenizer.tokenize_line("this is a frog")
+    print(test_sentence)
+    print(bigram_lm.sentence_probability(test_sentence))
