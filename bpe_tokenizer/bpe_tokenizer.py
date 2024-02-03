@@ -66,12 +66,8 @@ class BPE_Tokenizer:
 
     def save_vocabulary(self, filename):
         with open(filename, "w") as file:
-            for word in self.vocabulary:
-                if word[-1] == self.seperating_char:
-                    if len(word[:-1]) == 0: continue
-                    file.write(word[:-1]+"\n")
-                else:
-                    file.write(word+"\n")
+            for word in self.vocabulary:            
+                file.write(word+"\n")
             
     def save_merge_rules(self, filename):
         with open(filename, "w") as file:
