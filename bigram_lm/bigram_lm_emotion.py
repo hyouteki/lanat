@@ -47,7 +47,7 @@ if __name__ == "__main__":
     # labels = ["angry", "joy"]
 
     bigram_lm.learn(tokenized_corpus, labels)
-    print(bigram_lm.bigram_emotion_profile)
-    # bigram_lm.bigram_emotion_scores()
+    # print(bigram_lm.bigram_emotion_profile)
+    bigram_lm.bigram_emotion_scores()
     bigram_lm.load_emotion_profiles("emotion_profiles")
     # print(bigram_lm.emotion_profiles)
