@@ -1,6 +1,5 @@
 from bigram_lm import Bigram_LM
 import pickle
-# import utils
 import random
 
 LAPLACE = False
@@ -26,8 +25,8 @@ for emotion, model in models.items():
         prob1 = model.calc_bigram_probability(bigram, LAPLACE, KNESER_NEY)
         prob2 = emotion_profiles[emotion][bigram] if bigram in emotion_profiles[emotion] else 0
         model.set_bigram_probability(bigram, meet_operator(prob1, prob2))
-    with open(f"{emotion}_probs_plus_half", "wb") as file:
-        pickle.dump(model.bigram_probs, file)
+    # with open(f"{emotion}_probs_plus_half", "wb") as file:
+    #     pickle.dump(model.bigram_probs, file)
         
 def sample_next_word(model, previous_token):
     candidate_words = model.bigrams.get(previous_token, [])
