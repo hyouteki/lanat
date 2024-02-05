@@ -3,9 +3,12 @@ import pickle
 import random
 
 LAPLACE = False
-KNESER_NEY = False
+KNESER_NEY = True
 MIN_SENTENCE_LEN = 15
 MAX_SENTENCE_LEN = 25
+THRESHOLD_1 = 0.5
+THRESHOLD_2 = 0.7
+THRESHOLD_3 = 0.9
 
 with open("../dataset/corpus.txt", "r") as file:
     tokenized_data = Bigram_LM().preprocess_data(file.readlines())
@@ -19,16 +22,38 @@ for _, model in models.items():
 with open("emotion_profiles", "rb") as file:
     emotion_profiles = pickle.load(file)
             
-def meet_operator(prob1, prob2):
-    return (0.2*prob1 + 0.8*prob2)/2
+def meet_operator_1(prob1, beta):
+    return (0.9*prob1 + 0.1*beta)
+
+def meet_operator_2(prob1, beta):
+    return (0.6*prob1 + 0.4*beta)
+
+def meet_operator_3(prob1, beta):
+    return (0.1*prob1 + 0.9*beta)
+
+def meet_operator_4(prob1, beta):
+    return (0.3*prob1 + 0.7*beta)
 
 for emotion, model in models.items():
     for bigram in model.bigram_counts.keys():
         prob1 = model.calc_bigram_probability(bigram, LAPLACE, KNESER_NEY)
-        prob2 = emotion_profiles[emotion][bigram]
-        model.set_bigram_probability(bigram, meet_operator(prob1, prob2))
-    # with open(f"{emotion}_probs_plus_half", "wb") as file:
-    #     pickle.dump(model.bigram_probs, file)
+        beta = emotion_profiles[emotion][bigram]
+
+        max_bigram_emotion_score = beta
+        # for bigram_probs in emotion_profiles.values():
+        #     max_bigram_emotion_score = max(max_bigram_emotion_score, bigram_probs[bigram])
+
+        if(max_bigram_emotion_score < THRESHOLD_1):
+            model.set_bigram_probability(bigram, meet_operator_1(prob1, beta))
+        elif(max_bigram_emotion_score < THRESHOLD_2):
+            model.set_bigram_probability(bigram, meet_operator_2(prob1, beta))
+        elif(max_bigram_emotion_score > THRESHOLD_3):
+            model.set_bigram_probability(bigram, meet_operator_3(prob1, beta))
+        else:
+            model.set_bigram_probability(bigram, meet_operator_4(prob1, beta))
+
+    with open(f"kneser_ney_{emotion}_probs_four_thresholds", "wb") as file:
+        pickle.dump(model.bigram_probs, file)
         
 def sample_next_word(model, previous_token):
     candidate_words = model.bigrams.get(previous_token, [])
