@@ -8,6 +8,7 @@ class Bigram_LM:
         self.bigram_prob = dict()
         
     def learn(self, tokenized_data):
+        self.vocabulary=set(token for line in tokenized_data for token in line)
         self.tokenized_data.extend(tokenized_data)
         for line in tokenized_data:
             for i in range(len(line)):
@@ -39,12 +40,17 @@ class Bigram_LM:
             return 0
 
     def get_bigram_probability(self, bigram,laplace,kneser_ney):
-        if(laplace==True):
-            return self.laplace_bigram_probability(bigram)
-        elif(kneser_ney==True):
-            return self.kneser_ney_bigram_probability_given_first_word(bigram)
+        if laplace:
+            result = self.laplace_bigram_probability_given_first_word(bigram)
+        elif kneser_ney:
+            result = self.kneser_ney_bigram_probability_given_first_word(bigram)
         else:
-            return self.bigram_counts[bigram]/self.unigram_counts[bigram[0]] if bigram in self.bigram_counts else 0
+            result = (self.bigram_counts[bigram] / self.unigram_counts[bigram[0]]) if bigram in self.bigram_counts else 0
+        
+        self.bigram_prob[bigram] = result
+        
+        return result
+
             
     def laplace_unigram_probability(self, unigram):
         prob = 1 + (self.unigram_counts[unigram] if unigram in self.unigram_counts else 0)
@@ -79,16 +85,16 @@ class Bigram_LM:
                         
 if __name__ == "__main__":
 
-    # with open('lanat\dataset\corpus.txt', 'r') as file:
-    #     data = file.readlines()
-    data = ["this is a  dog",
-            "this is a cat",
-            "i love my cat",
-            "this is my name "]
+    with open('lanat\dataset\corpus.txt', 'r') as file:
+        data = file.readlines()
+    # data = ["this is a  dog",
+    #         "this is a cat",
+    #         "i love my cat",
+    #         "this is my name "]
     tokenized_data = [line.split() for line in data]
     # print(tokenized_data)
     bigram_lm = Bigram_LM()
-    bigram_lm.vocabulary=set(token for line in tokenized_data for token in line)
+    
     # print(len(bigram_lm.vocabulary))
     # print(bigram_lm.vocabulary)
     bigram_lm.learn(tokenized_data)
