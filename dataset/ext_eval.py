@@ -4,7 +4,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.svm import SVC
 from sklearn.metrics import classification_report, f1_score
-
+import pickle
 #Training
 
 #Features
@@ -23,19 +23,15 @@ for i in range(len(labels_train)):
     labels_train[i]=labels_train[i].strip()
 
 #Testint
-
-with open('lm_corpus.txt', 'r') as file:
-    corpus_test = file.readlines()
-for i in range(len(corpus_test)):
-    corpus_test[i]=corpus_test[i].strip()
-
-
-#Cat_Var
-
-with open('lm_labels.txt', 'r') as file:
-    labels_test = file.readlines()
-for i in range(len(labels_test)):
-    labels_test[i]=labels_test[i].strip()
+corpus_test=[]
+labels_test=[]
+with open("generated_sentences.lanat", "rb") as file:
+    generated_sentences = pickle.load(file)
+    emotions = models = ["sadness", "joy", "surprise","fear", "anger", "love"]
+    for emotion in emotions:
+        sentences_for_emotion = generated_sentences.get(emotion, [])
+        labels_test.extend([emotion] * len(sentences_for_emotion))
+        corpus_test.extend(sentences_for_emotion)
 
 
 #Vectorizer
