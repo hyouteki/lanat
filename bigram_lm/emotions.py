@@ -1,61 +1,54 @@
 from bigram_lm import Bigram_LM
-import utils
+import pickle
+# import utils
 import random
 
-sadness = Bigram_LM()
-joy = Bigram_LM()
-surprise = Bigram_LM()
-fear = Bigram_LM()
-anger = Bigram_LM()
-love = Bigram_LM()
+LAPLACE = False
+KNESER_NEY = False
 
-with open('lanat\dataset\corpus.txt', 'r') as file:
-    data = file.readlines()
-tokenized_data = [line.split() for line in data]
-models = {"sadness": sadness, "joy": joy, "surprise": surprise, "fear": fear, "anger": anger, "love": love}
+with open("../dataset/corpus.txt", "r") as file:
+    tokenized_data = Bigram_LM().preprocess_data(file.readlines())
+    
+models = {"sadness": Bigram_LM(), "joy": Bigram_LM(), "surprise": Bigram_LM(),
+          "fear": Bigram_LM(), "anger": Bigram_LM(), "love": Bigram_LM()}
 
-for emo, model in models.items():
+for _, model in models.items():
     model.learn(tokenized_data)
 
-for line in tokenized_data:
-    previous_token = None
-    for token in line:
-        if previous_token is not None:
-            string = previous_token + " " + token
-            emo_score = utils.emotion_scores(string)
-        else:
-            emo_score = utils.emotion_scores(token)
+with open("emotion_profiles", "rb") as file:
+    emotion_profiles = pickle.load(file)
 
-        final_emo_scores = {score['label']: score['score'] for score in emo_score}
+def meet_operator(prob1, prob2):
+    return (prob1 + prob2)/2
 
-        for emo, model in models.items():
-            model_probab = model.get_bigram_probability((previous_token, token), False, False)
-            model_probab = (model_probab + final_emo_scores[emo]) / 2
-            model.bigram_prob[(previous_token, token)] = model_probab
-
-        previous_token = token
-
-
+for emotion, model in models.items():
+    for bigram in model.bigram_counts.keys():
+        prob1 = model.calc_bigram_probability(bigram, LAPLACE, KNESER_NEY)
+        prob2 = emotion_profiles[emotion][bigram] if bigram in emotion_profiles[emotion] else 0
+        model.set_bigram_probability(bigram, meet_operator(prob1, prob2))
+    with open(f"{emotion}_probs_plus_half", "wb") as file:
+        pickle.dump(model.bigram_probs, file)
+        
 def sample_next_word(model, previous_token):
     candidate_words = model.bigrams.get(previous_token, [])
     if not candidate_words:
         return None
     candidate_words_list = list(candidate_words)
-    next_word_probs = [model.bigram_prob.get((previous_token, word), 0) for word in candidate_words_list]
+    next_word_probs = [model.bigram_probs[(previous_token, word)] for word in candidate_words_list]
     return random.choices(candidate_words_list, next_word_probs)[0]
 
 def generate_sentence(model, max_words=10):
-    sentence = [random.choice(list(model.vocabulary))]
-    
+    starting_bigram = random.choice(
+        [bigram for bigram in model.bigram_counts if bigram[0] == model.starting_token])
+    sentence = [starting_bigram[1]]
     for _ in range(max_words - 1):
         next_word = sample_next_word(model, sentence[-1])
         if next_word is None:
             break
         sentence.append(next_word)
-    
     return ' '.join(sentence)
 
-
-for emo, model in models.items():
-    print(f"\nGenerated Sentence for {emo.capitalize()} Model:")
-    print(generate_sentence(model))
+if __name__ == "__main__":
+    for emotion, model in models.items():
+        print(f"\nGenerated Sentence for {emotion.capitalize()} Model:")
+        print(generate_sentence(model))
