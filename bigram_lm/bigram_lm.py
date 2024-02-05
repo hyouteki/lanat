@@ -5,7 +5,7 @@ class Bigram_LM:
         self.bigram_counts = dict()
         self.bigrams = dict()
         self.vocabulary = set()
-        self.bigram_prob = dict()
+        self.bigram_probs = dict()
         
     def learn(self, tokenized_data):
         self.vocabulary=set(token for line in tokenized_data for token in line)
@@ -30,67 +30,41 @@ class Bigram_LM:
                         self.bigrams[line[i]] = set([line[i + 1]])
                         self.bigram_counts[(line[i], line[i + 1])] = 1
 
-
-    def get_unigram_probability(self, unigram):
-        if unigram in self.unigram_counts:
-            prob = self.unigram_counts[unigram]
-            words = sum([count for _, count in self.unigram_counts.items()])
-            return prob/words
-        else:
-            return 0
-
-    def get_bigram_probability(self, bigram,laplace,kneser_ney):
+    def get_bigram_probability(self, bigram, laplace, kneser_ney):
+        result = 0
         if laplace:
-            result = self.laplace_bigram_probability_given_first_word(bigram)
+            result = self.laplace_bigram_probability(bigram)
         elif kneser_ney:
-            result = self.kneser_ney_bigram_probability_given_first_word(bigram)
-        else:
-            result = (self.bigram_counts[bigram] / self.unigram_counts[bigram[0]]) if bigram in self.bigram_counts else 0
-        
-        self.bigram_prob[bigram] = result
-        
+            result = self.kneser_ney_bigram_probability(bigram)
+        elif bigram in self.bigram_counts:
+            result = self.bigram_counts[bigram] / self.unigram_counts[bigram[0]]
+        self.bigram_probs[bigram] = result 
         return result
 
-            
-    def laplace_unigram_probability(self, unigram):
-        prob = 1 + (self.unigram_counts[unigram] if unigram in self.unigram_counts else 0)
-        words = sum([count+1 for _, count in self.unigram_counts.items()])
-        return prob/words
-    
-    def laplace_bigram_probability_given_first_word(self, bigram):
+    def laplace_bigram_probability(self, bigram):
         prob = 1 + (self.bigram_counts[bigram] if bigram in self.bigram_counts else 0)
         words = (self.unigram_counts[bigram[0]]+len(self.vocabulary))
         return prob/words
-    
-    def kneser_ney_unigram_probability(self, unigram):
-        total_unigrams = sum(self.unigram_counts.values())
-        prob = max(self.unigram_counts[unigram] - 0.5, 0) / total_unigrams
-        return prob
 
-    def kneser_ney_bigram_probability_given_first_word(self, bigram):
-        continuation_count = sum(1 for w2 in self.bigram_counts if w2[0] == bigram[0])
-
+    def kneser_ney_bigram_probability(self, bigram):
+        continuation_count = len(self.bigrams[bigram[0]])
         discount = 0.75
-        alpha_factor = discount / self.unigram_counts[bigram[0]]
-        prob = max(self.bigram_counts[bigram] - discount, 0) / self.unigram_counts[bigram[0]]
-        prob += (alpha_factor * continuation_count)
-        return prob
-    
-    # def sentence_probability(self, sentence):
-    #     prob = self.unigram_probability(sentence[0])
-    #     for i in range(len(sentence)-1):
-    #         bigram = (sentence[i], sentence[i+1])
-    #         prob *= self.bigram_probability(bigram)
-    #     return prob
+        alpha = (discount / self.unigram_counts[bigram[0]]) * continuation_count
+        probability_continuation = sum([1 for bigram_t in self.bigram_counts
+                                        if bigram_t[1] == bigram[1]]) / len(self.bigram_counts)
+        probability = max(self.bigram_counts[bigram] - discount, 0) / self.unigram_counts[bigram[0]]
+        probability += alpha * probability_continuation
+        return probability
                         
 if __name__ == "__main__":
-    with open('lanat\dataset\corpus.txt', 'r') as file:
-        data = file.readlines()
+    # with open("../dataset/corpus.txt", "r") as file:
+    #     data = file.readlines()
 
-    # data = ["this is a  dog",
-    #         "this is a cat",
-    #         "i love my cat",
-    #         "this is my name "]
+    data = ["this is a  dog",
+            "this is a cat",
+            "i love my cat",
+            "this is my name "]
+    
     tokenized_data = [line.split() for line in data]
     print(tokenized_data)
     bigram_lm = Bigram_LM()
@@ -98,11 +72,13 @@ if __name__ == "__main__":
     # print(len(bigram_lm.vocabulary))
     # print(bigram_lm.vocabulary)
     bigram_lm.learn(tokenized_data)
-    bigram_lm.bigram_prob = {bigram: bigram_lm.get_bigram_probability(bigram,False,False) for bigram in bigram_lm.bigram_counts}
+    bigram_lm.bigram_prob = {
+        bigram: bigram_lm.get_bigram_probability(bigram,False,False) for bigram in bigram_lm.bigram_counts}
     print(bigram_lm.bigram_prob)
     print(bigram_lm.unigram_counts)
     print(bigram_lm.bigram_counts)
     print(bigram_lm.bigrams)
+    print(bigram_lm.kneser_ney_bigram_probability(("this", "is")))
     # test_sentence = "i love my cat".split()
     # print(test_sentence)
     # print(bigram_lm.sentence_probability(test_sentence))
