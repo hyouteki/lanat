@@ -69,30 +69,24 @@ if __name__ == "__main__":
     tokenized_data = [line.split() for line in data]
     bigram_lm = Bigram_LM()
     bigram_lm.learn(bigram_lm.preprocess_data(data))
-    
-    # Without Smoothing
-    no_smoothing_top_bigrams = sorted(bigram_lm.bigram_counts.keys(),
-                                      key=lambda bigram: bigram_lm.calc_bigram_probability(bigram, False, False),
-                                      reverse=True)[:5]
-    
-    print("Top 5 Bigrams without Smoothing:")
-    for bigram in no_smoothing_top_bigrams:
-        print(f"{bigram}: {bigram_lm.calc_bigram_probability(bigram, False, False)}")
 
-    laplace_top_bigrams = sorted(bigram_lm.bigram_counts.keys(),
-                                key=lambda bigram: bigram_lm.laplace_bigram_probability(bigram),
-                                reverse=True)[:5]
-    
-    
-    print("Top 5 Bigrams with Laplace Smoothing:")
-    for bigram in laplace_top_bigrams:
-        print(f"{bigram}: {bigram_lm.laplace_bigram_probability(bigram)}")
+    top_bigrams_without_smoothing = sorted(
+        bigram_lm.bigram_counts.keys(),
+        key=lambda bigram: bigram_lm.calc_bigram_probability(bigram, False, False), reverse=True)[:5]
+    print("Top 5 bigrams without smoothing:")
+    for bigram in top_bigrams_without_smoothing:
+        print(f"   {bigram}: {bigram_lm.calc_bigram_probability(bigram, False, False):.3f}")
 
-    # Kneser-Ney Smoothing
-    kneser_ney_top_bigrams = sorted(bigram_lm.bigram_counts.keys(),
-                                    key=lambda bigram: bigram_lm.kneser_ney_bigram_probability(bigram),
-                                    reverse=True)[:5]
+    top_bigrams_with_laplace = sorted(
+        bigram_lm.bigram_counts.keys(),
+        key=lambda bigram: bigram_lm.laplace_bigram_probability(bigram), reverse=True)[:5]
+    print("\nTop 5 bigrams with laplace smoothing:")
+    for bigram in top_bigrams_with_laplace:
+        print(f"   {bigram}: {bigram_lm.laplace_bigram_probability(bigram):.3f}")
 
-    print("\nTop 5 Bigrams with Kneser-Ney Smoothing:")
-    for bigram in kneser_ney_top_bigrams:
-        print(f"{bigram}: {bigram_lm.kneser_ney_bigram_probability(bigram)}")
+    top_bigrams_with_kneser_ney = sorted(
+        bigram_lm.bigram_counts.keys(),
+        key=lambda bigram: bigram_lm.kneser_ney_bigram_probability(bigram), reverse=True)[:5]
+    print("\nTop 5 bigrams with kneser-ney smoothing:")
+    for bigram in top_bigrams_with_kneser_ney:
+        print(f"   {bigram}: {bigram_lm.kneser_ney_bigram_probability(bigram):.3f}")
