@@ -2,8 +2,8 @@ from bigram_lm import Bigram_LM
 import pickle
 import random
 
-LAPLACE = False
-KNESER_NEY = True
+LAPLACE = True
+KNESER_NEY = False
 MIN_SENTENCE_LEN = 15
 MAX_SENTENCE_LEN = 25
 THRESHOLD_1 = 0.5
@@ -52,8 +52,6 @@ for emotion, model in models.items():
         else:
             model.set_bigram_probability(bigram, meet_operator_4(prob1, beta))
 
-    with open(f"kneser_ney_{emotion}_probs_four_thresholds", "wb") as file:
-        pickle.dump(model.bigram_probs, file)
         
 def sample_next_word(model, previous_token):
     candidate_words = model.bigrams.get(previous_token, [])
