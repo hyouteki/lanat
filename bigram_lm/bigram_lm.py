@@ -62,24 +62,37 @@ class Bigram_LM:
         return probability
                         
 if __name__ == "__main__":
-    # with open("../dataset/corpus.txt", "r") as file:
-    #     data = file.readlines()
+    with open("../dataset/corpus.txt", "r") as file:
+        data = file.readlines()
 
-    data = ["this is a  dog",
-            "this is a cat",
-            "i love my cat",
-            "this is my name "]
-    
+
     tokenized_data = [line.split() for line in data]
-    print(tokenized_data)
     bigram_lm = Bigram_LM()
     bigram_lm.learn(bigram_lm.preprocess_data(data))
-    bigram_lm.bigram_prob = {
-        bigram: bigram_lm.get_bigram_probability(bigram, False, False) for bigram in bigram_lm.bigram_counts
-    }
-    print(bigram_lm.bigram_prob)
-    print(bigram_lm.unigram_counts)
-    print(bigram_lm.bigram_counts)
-    print(bigram_lm.bigrams)
-    print(bigram_lm.kneser_ney_bigram_probability(("this", "is")))
-    bigram_lm.preprocess_data(data)
+    
+    # Without Smoothing
+    no_smoothing_top_bigrams = sorted(bigram_lm.bigram_counts.keys(),
+                                      key=lambda bigram: bigram_lm.calc_bigram_probability(bigram, False, False),
+                                      reverse=True)[:5]
+    
+    print("Top 5 Bigrams without Smoothing:")
+    for bigram in no_smoothing_top_bigrams:
+        print(f"{bigram}: {bigram_lm.calc_bigram_probability(bigram, False, False)}")
+
+    laplace_top_bigrams = sorted(bigram_lm.bigram_counts.keys(),
+                                key=lambda bigram: bigram_lm.laplace_bigram_probability(bigram),
+                                reverse=True)[:5]
+    
+    
+    print("Top 5 Bigrams with Laplace Smoothing:")
+    for bigram in laplace_top_bigrams:
+        print(f"{bigram}: {bigram_lm.laplace_bigram_probability(bigram)}")
+
+    # Kneser-Ney Smoothing
+    kneser_ney_top_bigrams = sorted(bigram_lm.bigram_counts.keys(),
+                                    key=lambda bigram: bigram_lm.kneser_ney_bigram_probability(bigram),
+                                    reverse=True)[:5]
+
+    print("\nTop 5 Bigrams with Kneser-Ney Smoothing:")
+    for bigram in kneser_ney_top_bigrams:
+        print(f"{bigram}: {bigram_lm.kneser_ney_bigram_probability(bigram)}")
