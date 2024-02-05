@@ -84,15 +84,15 @@ class Bigram_LM:
     #     return prob
                         
 if __name__ == "__main__":
-
     with open('lanat\dataset\corpus.txt', 'r') as file:
         data = file.readlines()
+
     # data = ["this is a  dog",
     #         "this is a cat",
     #         "i love my cat",
     #         "this is my name "]
     tokenized_data = [line.split() for line in data]
-    # print(tokenized_data)
+    print(tokenized_data)
     bigram_lm = Bigram_LM()
     
     # print(len(bigram_lm.vocabulary))
