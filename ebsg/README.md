@@ -90,9 +90,7 @@ if emotion_score < 0.7 then w1 = 0.6 and w2 = 0.4
 else w1 = 0.3 and w2 = 0.7
 ```
 
-## Part 3
-
-### 2 generated samples for each emotion, for a total of 12 generated samples
+## Part 3: Generated samples
 
 ### Sadness
 
