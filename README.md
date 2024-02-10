@@ -1,2 +1,2 @@
 ## processing de LANguage NATural
-- [bpe_tokenizer](https://github.com/Hyouteki/lanat/tree/main/bpe_tokenizer)
+- [Emotion based sentence generation](https://github.com/Hyouteki/lanat/tree/main/ebsg)

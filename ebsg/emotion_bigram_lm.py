@@ -1,5 +1,6 @@
 from bigram_lm import Bigram_LM
 import pickle
+import json
 import random
 
 LAPLACE = True
@@ -10,7 +11,7 @@ THRESHOLD_1 = 0.5
 THRESHOLD_2 = 0.7
 THRESHOLD_3 = 0.9
 
-with open("../dataset/corpus.txt", "r") as file:
+with open("corpus.txt", "r") as file:
     tokenized_data = Bigram_LM().preprocess_data(file.readlines())
     
 models = {"sadness": Bigram_LM(), "joy": Bigram_LM(), "surprise": Bigram_LM(),
@@ -19,7 +20,7 @@ models = {"sadness": Bigram_LM(), "joy": Bigram_LM(), "surprise": Bigram_LM(),
 for _, model in models.items():
     model.learn(tokenized_data)
 
-with open("emotion_profiles", "rb") as file:
+with open("emotion_profiles.lanat", "rb") as file:
     emotion_profiles = pickle.load(file)
             
 def meet_operator_1(prob1, beta):
@@ -38,11 +39,7 @@ for emotion, model in models.items():
     for bigram in model.bigram_counts.keys():
         prob1 = model.calc_bigram_probability(bigram, LAPLACE, KNESER_NEY)
         beta = emotion_profiles[emotion][bigram]
-
         max_bigram_emotion_score = beta
-        # for bigram_probs in emotion_profiles.values():
-        #     max_bigram_emotion_score = max(max_bigram_emotion_score, bigram_probs[bigram])
-
         if(max_bigram_emotion_score < THRESHOLD_1):
             model.set_bigram_probability(bigram, meet_operator_1(prob1, beta))
         elif(max_bigram_emotion_score < THRESHOLD_2):
@@ -52,7 +49,6 @@ for emotion, model in models.items():
         else:
             model.set_bigram_probability(bigram, meet_operator_4(prob1, beta))
 
-        
 def sample_next_word(model, previous_token):
     candidate_words = model.bigrams.get(previous_token, [])
     if not candidate_words:
@@ -82,5 +78,5 @@ if __name__ == "__main__":
     generated_sentences = dict()
     for emotion, model in models.items():
         generated_sentences[emotion] = [generate_sentence(model) for _ in range(50)]
-    with open("generated_sentences.lanat", "wb") as file:
-        pickle.dump(generated_sentences, file)
+    with open("generated_sentences.json", "w") as file:
+        json.dump(generated_sentences, file, indent=4)

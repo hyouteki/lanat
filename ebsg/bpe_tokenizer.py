@@ -3,7 +3,6 @@ class BPE_Tokenizer:
         self.seperating_char = '$'
         self.filename = ""
         self.word_freq_pairs = []
-        # assuming the vocabulary is english
         self.vocabulary = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
                            'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
                            's', 't', 'u', 'v', 'w', 'x', 'y', 'z', self.seperating_char}
@@ -107,7 +106,6 @@ class BPE_Tokenizer:
                 
 if __name__ == "__main__":
     bpe_tokenizer = BPE_Tokenizer()
-    bpe_tokenizer.learn_vocabulary("../dataset/corpus.txt", 100)
-    bpe_tokenizer.save_merge_rules("tests/merge_rules.txt")
-    bpe_tokenizer.save_vocabulary("tests/vocabulary.txt")
-    bpe_tokenizer.tokenize("tests/naked_by_james_arthur.txt", "tests/tokenized_naked_by_james_arthur.txt")
+    bpe_tokenizer.learn_vocabulary("corpus.txt", 100)
+    bpe_tokenizer.save_merge_rules("merge_rules.txt")
+    bpe_tokenizer.save_vocabulary("vocabulary.txt")

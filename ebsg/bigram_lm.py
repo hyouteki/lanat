@@ -10,7 +10,7 @@ class Bigram_LM:
 
     def preprocess_data(self, data):
         return [[self.starting_token]+line.split() for line in data]
-        
+
     def learn(self, tokenized_data):
         self.vocabulary = set(token for line in tokenized_data for token in line)
         self.tokenized_data.extend(tokenized_data)
@@ -62,9 +62,8 @@ class Bigram_LM:
         return probability
                         
 if __name__ == "__main__":
-    with open("../dataset/corpus.txt", "r") as file:
+    with open("corpus.txt", "r") as file:
         data = file.readlines()
-
 
     tokenized_data = [line.split() for line in data]
     bigram_lm = Bigram_LM()
