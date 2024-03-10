@@ -7,6 +7,7 @@ from torch.nn.utils.rnn import pad_sequence
 from sklearn.metrics import accuracy_score, f1_score
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import classification_report
 
 class CustomDataset(Dataset):
     def __init__(self, x, y):
@@ -25,7 +26,7 @@ def collate_fn(batch):
     targets = pad_sequence(targets, batch_first=True, padding_value=0)
     return inputs, targets
 
-def run(load_embeddings, embedding_dim, embeddings_path, Model, name):
+def run(load_embeddings, embedding_dim, embeddings_path, Model, name,number_epochs):
     with open("processed_train_data.json", "r") as file:
         processed_train_data = json.load(file)
     with open("processed_val_data.json", "r") as file:
@@ -76,7 +77,7 @@ def run(load_embeddings, embedding_dim, embeddings_path, Model, name):
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-    num_epochs = 15
+    num_epochs = number_epochs
 
     train_losses = []
     val_losses = []
@@ -179,3 +180,6 @@ def run(load_embeddings, embedding_dim, embeddings_path, Model, name):
 
     print(f"Final Test Accuracy: {test_accuracy:.4f}")
     print(f"Final Test Macro F1: {test_macro_f1:.4f}")
+    classification_report_test = classification_report(all_targets_test, all_preds_test, target_names=label_to_index.keys())
+    print("Classification Report for Test Data:\n", classification_report_test)
+
