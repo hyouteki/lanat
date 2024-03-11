@@ -5,8 +5,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from sklearn.metrics import f1_score
-from your_custom_module import CustomDataset, collate_fn  # Replace with actual module names
-from your_model_module import BiLSTMCRF  # Replace with actual module names
+from nodels
 
 def run_model(model_path, name):
     # Load your processed test data here
