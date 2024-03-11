@@ -5,10 +5,8 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 from sklearn.metrics import f1_score
-from nodels
 
 def run_model(model_path, name):
-    # Load your processed test data here
     with open("processed_test_data.json", "r") as file:
         processed_test_data = json.load(file)
 
