@@ -7,11 +7,9 @@ from sklearn.metrics import classification_report
 import skeleton
 import main
 
-def run(Model, model_path):
-    model_state_dict = torch.load(model_path).state_dict()
-    model = Model.load_state_dict(model_state_dict)
-    
-    with open("test_dataset.json", "r") as file:
+
+def run(Model, load_embeddings, embedding_dim, embeddings_path, model_path):
+    with open("processed_test_data.json", "r") as file:
         processed_test_data = json.load(file)
 
     texts_test = [entry["text"] for entry in processed_test_data.values()]
@@ -27,46 +25,25 @@ def run(Model, model_path):
                 word_to_index[token] = index
                 index += 1
 
-    label_to_index = {
-        "O": 0,
-        "B_COURT": 1,
-        "I_COURT": 2,
-        "B_PETITIONER": 3,
-        "I_PETITIONER": 4,
-        "B_RESPONDENT": 5,
-        "I_RESPONDENT": 6,
-        "B_JUDGE": 7,
-        "I_JUDGE": 8,
-        "B_DATE": 9,
-        "I_DATE": 10,
-        "B_ORG": 11,
-        "I_ORG": 12,
-        "B_GPE": 13,
-        "I_GPE": 14,
-        "B_STATUTE": 15,
-        "I_STATUTE": 16,
-        "B_PROVISION": 17,
-        "I_PROVISION": 18,
-        "B_PRECEDENT": 19,
-        "I_PRECEDENT": 20,
-        "B_CASE_NUMBER": 21,
-        "I_CASE_NUMBER": 22,
-        "B_WITNESS": 23,
-        "I_WITNESS": 24,
-        "B_OTHER_PERSON": 25,
-        "I_OTHER_PERSON": 26,
-    }
+    label_to_index = {"O": 0, "B": 1, "I": 2} 
+    embedding_matrix = load_embeddings(embeddings_path, word_to_index, embedding_dim)
 
     x_test = [
         [word_to_index.get(token, word_to_index["<unk>"]) for token in text.split()]
         for text in texts_test
     ]
     y_test = [[label_to_index[label] for label in entry] for entry in labels_test]
-    
+
     test_dataset = main.CustomDataset(x_test, y_test)
     test_loader = DataLoader(
         test_dataset, batch_size=30, shuffle=False, collate_fn=main.collate_fn
     )
+
+    hidden_size = 100
+    output_size = len(label_to_index)
+    model = Model(
+        embedding_matrix, hidden_size, output_size, embedding_dim
+    ).load_state_dict(torch.load(model_path))
 
     all_preds_test = []
     all_targets_test = []
@@ -93,5 +70,12 @@ def run(Model, model_path):
     )
     print("Classification Report for Test Data:\n", classification_report_test)
 
+
 if __name__ == "__main__":
-    run(skeleton.Rnn, "./models/rnn_glove.pth")
+    run(
+        skeleton.Rnn,
+        skeleton.load_glove_embeddings,
+        100,
+        "../word_embeddings/glove.6B.100d.txt",
+        "./models/rnn_glove.pth",
+    )
