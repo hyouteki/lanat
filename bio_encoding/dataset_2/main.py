@@ -156,7 +156,7 @@ def run(load_embeddings, embedding_dim, embeddings_path, Model, name,number_epoc
     plt.savefig(f"plots/{name}_macro.png") 
     plt.show()
 
-    torch.save(model.state_dict(),f"models/{name}.pth")
+    # torch.save(model.state_dict(),f"models/{name}.pth")
 
     model.eval()
 
