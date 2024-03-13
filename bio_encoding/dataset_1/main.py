@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
 
+print("hello")
 
 class CustomDataset(Dataset):
     def __init__(self, x, y):
@@ -207,7 +208,7 @@ def run(load_embeddings, embedding_dim, embeddings_path, Model, name, number_epo
     plt.savefig(f"plots/{name}_macro.png")
     plt.show()
 
-    torch.save(model.state_dict(), f"models/{name}.pth")
+    torch.save(model, f"models/t1_{name}.pt")
 
     model.eval()
 
