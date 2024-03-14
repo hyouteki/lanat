@@ -118,7 +118,7 @@ def run(load_embeddings, embedding_dim, embeddings_path, Model, name, number_epo
         test_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn
     )
 
-    hidden_size = 256
+    hidden_size = 32
     output_size = len(label_to_index)
     model = Model(embedding_matrix, hidden_size, output_size, embedding_dim)
 

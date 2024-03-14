@@ -117,9 +117,9 @@ def run(load_embeddings, embedding_dim, embeddings_path, Model, name, number_epo
         test_dataset, batch_size=batch_size, shuffle=False, collate_fn=collate_fn
     )
 
-    hidden_size = 128
+    hidden_size = 256
     output_size = len(label_to_index)
-    model = Model(embedding_matrix, hidden_size, output_size, embedding_dim)
+    model = Model(embedding_matrix, hidden_size, output_size,embedding_dim)
 
     criterion = nn.CrossEntropyLoss()
     optimizer = optim.Adam(model.parameters(), lr=0.001)
@@ -208,7 +208,7 @@ def run(load_embeddings, embedding_dim, embeddings_path, Model, name, number_epo
     plt.savefig(f"plots/{name}_macro.png")
     plt.show()
 
-    torch.save(model.state_dict(), f"models/{name}.pth")
+    torch.save(model, f"t2_models/{name}.pt")
 
     model.eval()
 

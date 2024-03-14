@@ -9,6 +9,8 @@ from sklearn.metrics import accuracy_score, f1_score
 from sklearn.metrics import classification_report
 import re
 import os
+import warnings
+warnings.filterwarnings("ignore")
 
 class CustomDataset(Dataset):
     def __init__(self, x, y):
@@ -230,8 +232,8 @@ def ner(model_path):
     classification_report_test = classification_report(
         all_targets_test, all_preds_test, target_names=label_to_index.keys()
     )
-    print("Classification Report for Test Data:\n", classification_report_test)
-    print("\n\n")
+
+    print("\n")
 
 if __name__ == "__main__":
     models = os.listdir("models")
