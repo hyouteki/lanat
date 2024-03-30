@@ -1,158 +1,178 @@
 import torch
-from torch import nn
-import torch.nn.functional as F
+from torch.utils.data import DataLoader
 from transformers import BertTokenizer, BertModel
-from torch.utils.data import Dataset, DataLoader
 import pandas as pd
+from tqdm import tqdm
 import matplotlib.pyplot as plt
 import numpy as np
+# Check if GPU is available and set device accordingly
+if torch.cuda.is_available():
+    device = torch.device("cuda")
+    print(f'There are {torch.cuda.device_count()} GPU(s) available.')
+    print('We will use the GPU:', torch.cuda.get_device_name(0))
+else:
+    print('No GPU available, using the CPU instead.')
+    device = torch.device("cpu")
 
-class SimilarityDataset(Dataset):
-    def __init__(self, data, tokenizer, max_len):
+# Load the dataset
+train_data = pd.read_csv('train.csv', sep='\t')
+print(train_data.columns)
+
+val_data = pd.read_csv('dev.csv', sep='\t')
+print(val_data.columns)
+# Initialize tokenizer
+tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+
+# Custom dataset class
+class SimilarityDataset(torch.utils.data.Dataset):
+    def __init__(self, data):
         self.data = data
-        self.tokenizer = tokenizer
-        self.max_len = max_len
+        self.sentences1 = []
+        self.sentences2 = []
+        self.scores = []
+
+        for _, row in data.iterrows():
+            if row['sentence1'] and row['sentence2'] and row['score']:
+                self.sentences1.append(str(row['sentence1']))
+                self.sentences2.append(str(row['sentence2']))
+                self.scores.append(row['score'])
 
     def __len__(self):
-        return len(self.data)
+        return len(self.sentences1)
 
-    def __getitem__(self, index):
-        row = self.data.iloc[index]
+    def __getitem__(self, idx):
+        sentence1 = self.sentences1[idx]
+        sentence2 = self.sentences2[idx]
+        score = self.scores[idx]
+        encoding = tokenizer.encode_plus(sentence1, sentence2, padding='max_length', max_length=128, truncation=True, return_tensors='pt')
+        input_ids = encoding['input_ids'].squeeze(0)  # Remove the extra dimension
+        attention_mask = encoding['attention_mask'].squeeze(0)  # Remove the extra dimension
+        return input_ids, attention_mask, score
 
-        # Check if all required columns are present
-        if 'score' not in row or pd.isna(row['score']) or 'sentence1' not in row or pd.isna(row['sentence1']) or 'sentence2' not in row or pd.isna(row['sentence2']):
-            # Skip this row if any required field is missing
-            return None
+# Create datasets and data loaders
+train_dataset = SimilarityDataset(train_data)
+val_dataset = SimilarityDataset(val_data)
+train_dataloader = DataLoader(train_dataset, batch_size=32, shuffle=True)
+val_dataloader = DataLoader(val_dataset, batch_size=32, shuffle=False)
 
-        score = float(row['score'])  # Convert score to float
-        sentence1 = row['sentence1']
-        sentence2 = row['sentence2']
-
-        # Check if the combined length of the two sentences exceeds max_len
-        combined_length = len(sentence1.split()) + len(sentence2.split())
-        if combined_length > self.max_len:
-            # Handle the case where the combined length exceeds max_len
-            # Truncate the longer sentence to fit within max_len
-            max_len_sentence1 = self.max_len // 2
-            max_len_sentence2 = self.max_len - max_len_sentence1
-
-            sentence1_tokens = sentence1.split()[:max_len_sentence1]
-            sentence2_tokens = sentence2.split()[:max_len_sentence2]
-
-            sentence1 = ' '.join(sentence1_tokens)
-            sentence2 = ' '.join(sentence2_tokens)
-
-        inputs = self.tokenizer.encode_plus(
-            sentence1,
-            sentence2,
-            add_special_tokens=True,
-            max_length=self.max_len,
-            padding='max_length',
-            truncation=True,
-            return_tensors='pt'
-        )
-
-        input_ids = inputs['input_ids'].squeeze()
-        token_type_ids = inputs['token_type_ids'].squeeze()
-        attention_mask = inputs['attention_mask'].squeeze()
-
-        return input_ids, token_type_ids, attention_mask, torch.tensor(score, dtype=torch.double)
-
-train_data = pd.read_csv('train.csv', sep='\t', names=['score', 'sentence1', 'sentence2'])
-val_data = pd.read_csv('dev.csv', sep='\t', names=['score', 'sentence1', 'sentence2'])
-
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-max_len = 128
-
-train_dataset = SimilarityDataset(train_data, tokenizer, max_len)
-val_dataset = SimilarityDataset(val_data, tokenizer, max_len)
-
-train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
-val_loader = DataLoader(val_dataset, batch_size=16)
-
-class SimilarityModel(nn.Module):
+# Custom model class
+class BertForSimilarity(torch.nn.Module):
     def __init__(self):
-        super(SimilarityModel, self).__init__()
+        super(BertForSimilarity, self).__init__()
         self.bert = BertModel.from_pretrained('bert-base-uncased')
-        self.bert.to(torch.double)  # Convert BERT model to double precision
-        self.dropout = nn.Dropout(0.1)
-        self.fc = nn.Linear(768, 1, dtype=torch.double)  # Create linear layer with double precision
+        self.dropout = torch.nn.Dropout(0.3)
+        self.fc = torch.nn.Linear(768, 1)
+        self.double()
 
-    def forward(self, input_ids, token_type_ids, attention_mask):
-        outputs = self.bert(input_ids, token_type_ids=token_type_ids, attention_mask=attention_mask)
+    def forward(self, input_ids, attention_mask):
+        outputs = self.bert(input_ids=input_ids, attention_mask=attention_mask)
         pooled_output = outputs.pooler_output
-        dropout_output = self.dropout(pooled_output)
-        logits = self.fc(dropout_output)
-        return logits.squeeze(-1)
+        pooled_output = self.dropout(pooled_output)
+        output = self.fc(pooled_output)
+        return output
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-model = SimilarityModel().to(device)
-optimizer = torch.optim.Adam(model.parameters(), lr=2e-5)
+# Initialize model, optimizer, and loss function
+model = BertForSimilarity().to(device)
+optimizer = torch.optim.AdamW(model.parameters(), lr=2e-5)
+loss_fn = torch.nn.MSELoss()
 
-epochs = 3
-train_losses = []
-val_losses = []
+# Training function
+def train(epochs):
+    training_losses = []
+    validation_losses = []
+    training_pearson_corrs = []
+    validation_pearson_corrs = []
 
-for epoch in range(epochs):
-    model.train()
-    total_loss = 0
-    for input_ids, token_type_ids, attention_mask, scores in train_loader:
-        input_ids = input_ids.to(device)
-        token_type_ids = token_type_ids.to(device)
-        attention_mask = attention_mask.to(device)
-        scores = scores.to(device)
+    for epoch in range(epochs):
+        print(f'Epoch {epoch + 1}/{epochs}')
+        print('-' * 10)
 
-        optimizer.zero_grad()
-        outputs = model(input_ids, token_type_ids, attention_mask)
-        loss = torch.mean((outputs - scores) ** 2)  # Mean Squared Error
-        loss.backward()
-        optimizer.step()
-
-        total_loss += loss.item()
-
-    train_losses.append(total_loss / len(train_loader))
-
-    # Evaluation on validation set
-    model.eval()
-    total_val_loss = 0
-    all_outputs = []
-    all_scores = []
-    with torch.no_grad():
-        for input_ids, token_type_ids, attention_mask, scores in val_loader:
+        # Training loop
+        model.train()
+        train_loss = 0.0
+        train_pearson_corr = 0.0
+        for batch in tqdm(train_dataloader):
+            optimizer.zero_grad()
+            input_ids, attention_mask, labels = batch
             input_ids = input_ids.to(device)
-            token_type_ids = token_type_ids.to(device)
             attention_mask = attention_mask.to(device)
-            scores = scores.to(device)
+            labels = labels.to(device)
+            outputs = model(input_ids, attention_mask).squeeze(1)
+            loss = loss_fn(outputs, labels)
+            loss.backward()
+            optimizer.step()
+            train_loss += loss.item()
 
-            outputs = model(input_ids, token_type_ids, attention_mask)
-            loss = torch.mean((outputs - scores) ** 2)  # Mean Squared Error
-            total_val_loss += loss.item()
+            # Calculate Pearson correlation coefficient
+            pred_scores = outputs.detach().cpu().numpy()
+            true_scores = labels.detach().cpu().numpy()
+            train_pearson_corr += np.corrcoef(pred_scores, true_scores)[0, 1]
 
-            all_outputs.extend(outputs.cpu().numpy())
-            all_scores.extend(scores.cpu().numpy())
+        train_loss /= len(train_dataloader)
+        train_pearson_corr /= len(train_dataloader)
+        training_losses.append(train_loss)
+        training_pearson_corrs.append(train_pearson_corr)
 
-    val_losses.append(total_val_loss / len(val_loader))
+        # Validation loop
+        model.eval()
+        val_loss = 0.0
+        val_pearson_corr = 0.0
+        with torch.no_grad():
+            for batch in tqdm(val_dataloader):
+                inputs, labels = batch
+                input_ids = inputs['input_ids'].to(device)
+                attention_mask = inputs['attention_mask'].to(device)
+                labels = labels.to(device)
+                outputs = model(input_ids, attention_mask).squeeze(1)
+                loss = loss_fn(outputs, labels)
+                val_loss += loss.item()
 
-    # Calculate Pearson correlation
-    pearson_corr = np.corrcoef(all_outputs, all_scores)[0, 1]
-    print(f'Epoch {epoch+1}, Train Loss: {train_losses[-1]}, Val Loss: {val_losses[-1]}, Pearson Corr: {pearson_corr:.4f}')
+                # Calculate Pearson correlation coefficient
+                pred_scores = outputs.detach().cpu().numpy()
+                true_scores = labels.detach().cpu().numpy()
+                val_pearson_corr += np.corrcoef(pred_scores, true_scores)[0, 1]
 
-# Plot the loss curves
-plt.figure(figsize=(8, 6))
-plt.plot(range(epochs), train_losses, label='Training Loss')
-plt.plot(range(epochs), val_losses, label='Validation Loss')
-plt.xlabel('Epoch')
+        val_loss /= len(val_dataloader)
+        val_pearson_corr /= len(val_dataloader)
+        validation_losses.append(val_loss)
+        validation_pearson_corrs.append(val_pearson_corr)
+
+        print(f'Training Loss: {train_loss:.4f}')
+        print(f'Validation Loss: {val_loss:.4f}')
+        print(f'Training Pearson Correlation: {train_pearson_corr:.4f}')
+        print(f'Validation Pearson Correlation: {val_pearson_corr:.4f}')
+
+    return training_losses, validation_losses, training_pearson_corrs, validation_pearson_corrs
+
+# Train the model
+epochs = 5
+training_losses, validation_losses, training_pearson_corrs, validation_pearson_corrs = train(epochs)
+
+# Plot the loss and Pearson correlation
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+plt.plot(range(epochs), training_losses, label='Training Loss')
+plt.plot(range(epochs), validation_losses, label='Validation Loss')
+plt.xlabel('Epochs')
 plt.ylabel('Loss')
-plt.title('Loss Curves')
+plt.title('Loss Plot')
 plt.legend()
-plt.show()
 
-# Analyze and explain the plots
-print("Loss Plots Analysis:")
-print("The training and validation loss curves show the model's performance during training.")
-print("The training loss decreases steadily, indicating that the model is learning and improving on the training set.")
-print("The validation loss also decreases, but it may fluctuate or plateau, indicating the model's generalization ability.")
-print("Ideally, both training and validation losses should decrease and converge, with a small gap between them.")
-print("A large gap between the two curves may indicate overfitting or underfitting.")
-print("The Pearson correlation coefficient measures the linear correlation between the predicted and actual scores.")
-print("A higher value (closer to 1) indicates a stronger positive correlation and better model performance.")
+plt.subplot(1, 2, 2)
+plt.plot(range(epochs), training_pearson_corrs, label='Training Pearson Correlation')
+plt.plot(range(epochs), validation_pearson_corrs, label='Validation Pearson Correlation')
+plt.xlabel('Epochs')
+plt.ylabel('Pearson Correlation')
+plt.title('Pearson Correlation Plot')
+plt.legend()
+plt.tight_layout()
+plt.show()
+plt.subplot(1, 2, 2)
+plt.plot(range(epochs), training_pearson_corrs, label='Training Pearson Correlation')
+plt.plot(range(epochs), validation_pearson_corrs, label='Validation Pearson Correlation')
+plt.xlabel('Epochs')
+plt.ylabel('Pearson Correlation')
+plt.title('Pearson Correlation Plot')
+plt.legend()
+plt.tight_layout()
+plt.show()
