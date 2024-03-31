@@ -11,7 +11,7 @@ from tqdm import tqdm
 SRC_LANGUAGE = 'de'
 TGT_LANGUAGE = 'en'
 
-TRAIN_SPLIT_SIZE = 5000
+TRAIN_SPLIT_SIZE = 20000
 NUM_EPOCHS = 18
 
 class WMT16Dataset(Dataset):
@@ -274,8 +274,8 @@ with tqdm(total=NUM_EPOCHS, desc="Evaluating") as pbar:
         train_loss = train_epoch(transformer, optimizer)
         end_time = timer()
         val_loss = evaluate_loss(transformer)
-        print((f"Epoch: {epoch} Train loss: {train_loss:.3f}, Val loss: {val_loss:.3f}, ",
-               f"Epoch time = {(end_time - start_time):.3f}s"))
+        print(f"Epoch: {epoch} Train loss: {train_loss:.3f}, Val loss: {val_loss:.3f}, ",
+               f"Epoch time = {(end_time - start_time):.3f}s")
         pbar.update(1)
 
 # function to generate output sequence using greedy algorithm
@@ -312,7 +312,7 @@ def translate(model: torch.nn.Module, src_sentence: str):
     return " ".join(vocab_transform[TGT_LANGUAGE].lookup_tokens(list(tgt_tokens.cpu().numpy()))).replace("<bos>", "").replace("<eos>", "")
 
 import evaluate
-def bleuEvaluate(model, dataIter):
+def bleuEvaluate(model, dataIter, maxOrder):
     translations, actual = [], []
     for dataSample in dataIter.data:
         srcSentence = dataSample["translation"][SRC_LANGUAGE]
@@ -321,12 +321,14 @@ def bleuEvaluate(model, dataIter):
         translations.append(translatedSentence)
         actual.append(tgtSentence)
     bleu = evaluate.load("bleu")
-    return bleu.compute(predictions=translations, references=actual)
+    return bleu.compute(predictions=translations, references=actual, max_order=maxOrder)
 
 torch.save(transformer, 'models/transformer.pt')
 torch.save(optimizer, 'models/optimizer.pt')
 
 from pprint import pprint
-print(translate(transformer, "Eine Gruppe von Menschen steht vor einem Iglu ."))
-pprint(bleuEvaluate(transformer, WMT16Dataset(split="validation")))
-pprint(bleuEvaluate(transformer, WMT16Dataset(split="test")))
+for maxOrder in range(1, 5):
+    print(f"maxOrder: {maxOrder}")
+    pprint(bleuEvaluate(transformer, WMT16Dataset(split="validation"), maxOrder))
+    pprint(bleuEvaluate(transformer, WMT16Dataset(split="test"), maxOrder))
+    print()

@@ -2,57 +2,65 @@ from torchtext.data.utils import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
 from torchtext.datasets import multi30k, Multi30k
 from typing import Iterable, List
-
-
-# We need to modify the URLs for the dataset since the links to the original dataset are broken
-# Refer to https://github.com/pytorch/text/issues/1756#issuecomment-1163664163 for more info
-multi30k.URL["train"] = "https://raw.githubusercontent.com/neychev/small_DL_repo/master/datasets/Multi30k/training.tar.gz"
-multi30k.URL["valid"] = "https://raw.githubusercontent.com/neychev/small_DL_repo/master/datasets/Multi30k/validation.tar.gz"
+import torch
+from torch.utils.data import Dataset
+from torchtext.data.utils import get_tokenizer
+from datasets import load_dataset
+from tqdm import tqdm
 
 SRC_LANGUAGE = 'de'
 TGT_LANGUAGE = 'en'
 
-# Place-holders
+TRAIN_SPLIT_SIZE = 20000
+TRANSFORMER_PATH = "./models/transformer.pt"
+OPTIMIZER_PATH = "./models/optimizer.pt"
+
+class WMT16Dataset(Dataset):
+    def __init__(self, split):
+        self.split = split
+        self.data = load_dataset('wmt16', SRC_LANGUAGE + "-" + TGT_LANGUAGE, split=self.split)
+
+    def __len__(self):
+        return len(self.data)
+
+    def __getitem__(self, index):
+        srcText = self.data[index]['translation'][SRC_LANGUAGE]
+        tgtText = self.data[index]['translation'][TGT_LANGUAGE]
+        return srcText, tgtText
+
 token_transform = {}
 vocab_transform = {}
 
 token_transform[SRC_LANGUAGE] = get_tokenizer('spacy', language='de_core_news_sm')
 token_transform[TGT_LANGUAGE] = get_tokenizer('spacy', language='en_core_web_sm')
 
-# helper function to yield list of tokens
-def yield_tokens(data_iter: Iterable, language: str) -> List[str]:
-    language_index = {SRC_LANGUAGE: 0, TGT_LANGUAGE: 1}
+def yield_tokens(dataIter: Iterable, language: str) -> List[str]:
+    with tqdm(total=len(dataIter.data), desc="Evaluating") as pbar:
+        for dataSample in dataIter.data:
+            yield token_transform[language](dataSample["translation"][language])
+            pbar.update(1)
 
-    for data_sample in data_iter:
-        # print(data_sample[language_index[language]])
-        # print(token_transform[language](data_sample[language_index[language]]))
-        # exit(0)
-        yield token_transform[language](data_sample[language_index[language]])
-
-# Define special symbols and indices
 UNK_IDX, PAD_IDX, BOS_IDX, EOS_IDX = 0, 1, 2, 3
-# Make sure the tokens are in order of their indices to properly insert them in vocab
 special_symbols = ['<unk>', '<pad>', '<bos>', '<eos>']
 
 for ln in [SRC_LANGUAGE, TGT_LANGUAGE]:
-    # Training data Iterator
-    train_iter = Multi30k(split='train', language_pair=(SRC_LANGUAGE, TGT_LANGUAGE))
-    # Create torchtext's Vocab object
+    train_iter = WMT16Dataset(split=f'train[:{TRAIN_SPLIT_SIZE}]')
     vocab_transform[ln] = build_vocab_from_iterator(yield_tokens(train_iter, ln),
                                                     min_freq=1,
                                                     specials=special_symbols,
                                                     special_first=True)
 
-# Set ``UNK_IDX`` as the default index. This index is returned when the token is not found.
-# If not set, it throws ``RuntimeError`` when the queried token is not found in the Vocabulary.
 for ln in [SRC_LANGUAGE, TGT_LANGUAGE]:
     vocab_transform[ln].set_default_index(UNK_IDX)
+
+print("Info: tokenizer built")
 
 from torch import Tensor
 import torch
 import torch.nn as nn
 from torch.nn import Transformer
 import math
+
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # helper Module that adds positional encoding to the token embedding to introduce a notion of word order.
@@ -160,18 +168,10 @@ BATCH_SIZE = 128
 NUM_ENCODER_LAYERS = 3
 NUM_DECODER_LAYERS = 3
 
-transformer = Seq2SeqTransformer(NUM_ENCODER_LAYERS, NUM_DECODER_LAYERS, EMB_SIZE,
-                                 NHEAD, SRC_VOCAB_SIZE, TGT_VOCAB_SIZE, FFN_HID_DIM)
-
-for p in transformer.parameters():
-    if p.dim() > 1:
-        nn.init.xavier_uniform_(p)
-
+transformer = torch.load(TRANSFORMER_PATH)
 transformer = transformer.to(DEVICE)
-
 loss_fn = torch.nn.CrossEntropyLoss(ignore_index=PAD_IDX)
-
-optimizer = torch.optim.Adam(transformer.parameters(), lr=0.0001, betas=(0.9, 0.98), eps=1e-9)
+optimizer = torch.load(OPTIMIZER_PATH)
 
 from torch.nn.utils.rnn import pad_sequence
 
@@ -208,70 +208,6 @@ def collate_fn(batch):
     tgt_batch = pad_sequence(tgt_batch, padding_value=PAD_IDX)
     return src_batch, tgt_batch
 
-from torch.utils.data import DataLoader
-
-def train_epoch(model, optimizer):
-    model.train()
-    losses = 0
-    train_iter = Multi30k(split='train', language_pair=(SRC_LANGUAGE, TGT_LANGUAGE))
-    train_dataloader = DataLoader(train_iter, batch_size=BATCH_SIZE, collate_fn=collate_fn)
-
-    for src, tgt in train_dataloader:
-        src = src.to(DEVICE)
-        tgt = tgt.to(DEVICE)
-
-        tgt_input = tgt[:-1, :]
-
-        src_mask, tgt_mask, src_padding_mask, tgt_padding_mask = create_mask(src, tgt_input)
-
-        logits = model(src, tgt_input, src_mask, tgt_mask,src_padding_mask, tgt_padding_mask, src_padding_mask)
-
-        optimizer.zero_grad()
-
-        tgt_out = tgt[1:, :]
-        loss = loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
-        loss.backward()
-
-        optimizer.step()
-        losses += loss.item()
-
-    return losses / len(list(train_dataloader))
-
-
-def evaluate(model):
-    model.eval()
-    losses = 0
-
-    val_iter = Multi30k(split='valid', language_pair=(SRC_LANGUAGE, TGT_LANGUAGE))
-    val_dataloader = DataLoader(val_iter, batch_size=BATCH_SIZE, collate_fn=collate_fn)
-
-    for src, tgt in val_dataloader:
-        src = src.to(DEVICE)
-        tgt = tgt.to(DEVICE)
-
-        tgt_input = tgt[:-1, :]
-
-        src_mask, tgt_mask, src_padding_mask, tgt_padding_mask = create_mask(src, tgt_input)
-
-        logits = model(src, tgt_input, src_mask, tgt_mask,src_padding_mask, tgt_padding_mask, src_padding_mask)
-
-        tgt_out = tgt[1:, :]
-        loss = loss_fn(logits.reshape(-1, logits.shape[-1]), tgt_out.reshape(-1))
-        losses += loss.item()
-
-    return losses / len(list(val_dataloader))
-
-from timeit import default_timer as timer
-NUM_EPOCHS = 2
-
-for epoch in range(1, NUM_EPOCHS+1):
-    start_time = timer()
-    train_loss = train_epoch(transformer, optimizer)
-    end_time = timer()
-    val_loss = evaluate(transformer)
-    print((f"Epoch: {epoch}, Train loss: {train_loss:.3f}, Val loss: {val_loss:.3f}, "f"Epoch time = {(end_time - start_time):.3f}s"))
-
-
 # function to generate output sequence using greedy algorithm
 def greedy_decode(model, src, src_mask, max_len, start_symbol):
     src = src.to(DEVICE)
@@ -295,7 +231,6 @@ def greedy_decode(model, src, src_mask, max_len, start_symbol):
             break
     return ys
 
-
 # actual function to translate input sentence into target language
 def translate(model: torch.nn.Module, src_sentence: str):
     model.eval()
@@ -306,4 +241,23 @@ def translate(model: torch.nn.Module, src_sentence: str):
         model,  src, src_mask, max_len=num_tokens + 5, start_symbol=BOS_IDX).flatten()
     return " ".join(vocab_transform[TGT_LANGUAGE].lookup_tokens(list(tgt_tokens.cpu().numpy()))).replace("<bos>", "").replace("<eos>", "")
 
+import evaluate
+def bleuEvaluate(model, dataIter, maxOrder):
+    translations, actual = [], []
+    for dataSample in dataIter.data:
+        srcSentence = dataSample["translation"][SRC_LANGUAGE]
+        tgtSentence = dataSample["translation"][TGT_LANGUAGE]
+        translatedSentence = translate(model, srcSentence)
+        translations.append(translatedSentence)
+        actual.append(tgtSentence)
+    bleu = evaluate.load("bleu")
+    return bleu.compute(predictions=translations, references=actual, max_order=maxOrder)
+
 print(translate(transformer, "Eine Gruppe von Menschen steht vor einem Iglu ."))
+
+from pprint import pprint
+for maxOrder in range(1, 5):
+    print(f"maxOrder: {maxOrder}")
+    pprint(bleuEvaluate(transformer, WMT16Dataset(split="validation"), maxOrder))
+    pprint(bleuEvaluate(transformer, WMT16Dataset(split="test"), maxOrder))
+    print()
