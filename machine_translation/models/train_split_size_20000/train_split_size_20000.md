@@ -3,6 +3,7 @@
 - Epochs: 18
 
 ## Training 
+``` 
 Epoch: 1 Train loss: 6.947, Val loss: 7.035, Epoch time = 56.936s
 Epoch: 2 Train loss: 5.622, Val loss: 6.772, Epoch time = 56.986s
 Epoch: 3 Train loss: 5.159, Val loss: 6.760, Epoch time = 57.264s
@@ -21,6 +22,7 @@ Epoch: 15 Train loss: 3.348, Val loss: 6.873, Epoch time = 55.540s
 Epoch: 16 Train loss: 3.234, Val loss: 6.830, Epoch time = 55.776s
 Epoch: 17 Train loss: 3.123, Val loss: 6.752, Epoch time = 55.668s
 Epoch: 18 Train loss: 3.019, Val loss: 6.658, Epoch time = 56.042s
+```
 
 ## Translation from 'de' to 'en'
 - "de": Eine Gruppe von Menschen steht vor einem Iglu .
