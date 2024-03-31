@@ -1,0 +1,81 @@
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:   0%|          | 0/5000 [00:00<?, ?it/s]Evaluating:   2%|▏         | 109/5000 [00:00<00:04, 1085.46it/s]Evaluating:   5%|▍         | 240/5000 [00:00<00:03, 1211.05it/s]Evaluating:   8%|▊         | 375/5000 [00:00<00:03, 1269.51it/s]Evaluating:  10%|█         | 511/5000 [00:00<00:03, 1304.60it/s]Evaluating:  13%|█▎        | 651/5000 [00:00<00:03, 1337.51it/s]Evaluating:  16%|█▋        | 825/5000 [00:00<00:02, 1472.96it/s]Evaluating:  20%|██        | 1004/5000 [00:00<00:02, 1567.51it/s]Evaluating:  24%|██▍       | 1189/5000 [00:00<00:02, 1656.64it/s]Evaluating:  28%|██▊       | 1380/5000 [00:00<00:02, 1734.32it/s]Evaluating:  32%|███▏      | 1580/5000 [00:01<00:01, 1814.01it/s]Evaluating:  36%|███▌      | 1798/5000 [00:01<00:01, 1925.48it/s]Evaluating:  40%|███▉      | 1991/5000 [00:01<00:01, 1896.77it/s]Evaluating:  44%|████▍     | 2193/5000 [00:01<00:01, 1932.54it/s]Evaluating:  48%|████▊     | 2409/5000 [00:01<00:01, 1996.92it/s]Evaluating:  53%|█████▎    | 2630/5000 [00:01<00:01, 2059.34it/s]Evaluating:  57%|█████▋    | 2871/5000 [00:01<00:00, 2163.33it/s]Evaluating:  62%|██████▏   | 3101/5000 [00:01<00:00, 2203.88it/s]Evaluating:  67%|██████▋   | 3331/5000 [00:01<00:00, 2231.36it/s]Evaluating:  72%|███████▏  | 3578/5000 [00:01<00:00, 2302.05it/s]Evaluating:  77%|███████▋  | 3832/5000 [00:02<00:00, 2372.64it/s]Evaluating:  81%|████████▏ | 4070/5000 [00:02<00:00, 2373.88it/s]Evaluating:  86%|████████▌ | 4308/5000 [00:02<00:00, 2269.13it/s]Evaluating:  91%|█████████ | 4536/5000 [00:02<00:00, 2220.99it/s]Evaluating:  95%|█████████▌| 4772/5000 [00:02<00:00, 2258.80it/s]Evaluating: 100%|█████████▉| 4999/5000 [00:02<00:00, 2261.28it/s]Evaluating: 100%|██████████| 5000/5000 [00:02<00:00, 1970.86it/s]
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:   0%|          | 0/5000 [00:00<?, ?it/s]Evaluating:   3%|▎         | 128/5000 [00:00<00:03, 1277.42it/s]Evaluating:   6%|▌         | 291/5000 [00:00<00:03, 1479.11it/s]Evaluating:   9%|▉         | 446/5000 [00:00<00:03, 1504.09it/s]Evaluating:  12%|█▏        | 624/5000 [00:00<00:02, 1610.18it/s]Evaluating:  17%|█▋        | 841/5000 [00:00<00:02, 1810.26it/s]Evaluating:  21%|██▏       | 1072/5000 [00:00<00:01, 1978.87it/s]Evaluating:  26%|██▌       | 1301/5000 [00:00<00:01, 2079.28it/s]Evaluating:  31%|███       | 1558/5000 [00:00<00:01, 2228.50it/s]Evaluating:  37%|███▋      | 1829/5000 [00:00<00:01, 2377.41it/s]Evaluating:  41%|████▏     | 2067/5000 [00:01<00:01, 2352.50it/s]Evaluating:  47%|████▋     | 2343/5000 [00:01<00:01, 2475.10it/s]Evaluating:  53%|█████▎    | 2633/5000 [00:01<00:00, 2603.10it/s]Evaluating:  59%|█████▉    | 2941/5000 [00:01<00:00, 2745.97it/s]Evaluating:  65%|██████▍   | 3239/5000 [00:01<00:00, 2815.07it/s]Evaluating:  71%|███████   | 3558/5000 [00:01<00:00, 2926.81it/s]Evaluating:  78%|███████▊  | 3885/5000 [00:01<00:00, 3028.39it/s]Evaluating:  84%|████████▍ | 4188/5000 [00:01<00:00, 2976.85it/s]Evaluating:  90%|████████▉ | 4486/5000 [00:01<00:00, 2922.11it/s]Evaluating:  96%|█████████▌| 4795/5000 [00:01<00:00, 2968.75it/s]Evaluating: 100%|██████████| 5000/5000 [00:01<00:00, 2516.50it/s]
+Info: tokenizer built
+Evaluating:   0%|          | 0/18 [00:00<?, ?it/s]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:   6%|▌         | 1/18 [00:25<07:16, 25.70s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  11%|█         | 2/18 [00:47<06:10, 23.18s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  17%|█▋        | 3/18 [01:09<05:43, 22.90s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  22%|██▏       | 4/18 [01:33<05:23, 23.14s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  28%|██▊       | 5/18 [01:55<04:57, 22.86s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  33%|███▎      | 6/18 [02:17<04:30, 22.53s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  39%|███▉      | 7/18 [02:39<04:06, 22.41s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  44%|████▍     | 8/18 [03:03<03:47, 22.77s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  50%|█████     | 9/18 [03:26<03:25, 22.82s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  56%|█████▌    | 10/18 [03:49<03:03, 22.93s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  61%|██████    | 11/18 [04:12<02:41, 23.08s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  67%|██████▋   | 12/18 [04:34<02:16, 22.83s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  72%|███████▏  | 13/18 [04:57<01:53, 22.70s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  78%|███████▊  | 14/18 [05:19<01:30, 22.57s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  83%|████████▎ | 15/18 [05:41<01:07, 22.38s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  89%|████████▉ | 16/18 [06:02<00:43, 21.99s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating:  94%|█████████▍| 17/18 [06:24<00:22, 22.10s/it]Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Evaluating: 100%|██████████| 18/18 [06:47<00:00, 22.19s/it]Evaluating: 100%|██████████| 18/18 [06:47<00:00, 22.63s/it]
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+('Epoch: 1 Train loss: 7.691, Val loss: 7.295, ', 'Epoch time = 16.887s')
+('Epoch: 2 Train loss: 6.447, Val loss: 6.983, ', 'Epoch time = 14.586s')
+('Epoch: 3 Train loss: 6.061, Val loss: 6.879, ', 'Epoch time = 15.668s')
+('Epoch: 4 Train loss: 5.796, Val loss: 6.812, ', 'Epoch time = 15.668s')
+('Epoch: 5 Train loss: 5.539, Val loss: 6.776, ', 'Epoch time = 15.311s')
+('Epoch: 6 Train loss: 5.323, Val loss: 6.689, ', 'Epoch time = 15.952s')
+('Epoch: 7 Train loss: 5.150, Val loss: 6.653, ', 'Epoch time = 15.111s')
+('Epoch: 8 Train loss: 5.003, Val loss: 6.678, ', 'Epoch time = 16.620s')
+('Epoch: 9 Train loss: 4.875, Val loss: 6.659, ', 'Epoch time = 16.194s')
+('Epoch: 10 Train loss: 4.768, Val loss: 6.670, ', 'Epoch time = 16.353s')
+('Epoch: 11 Train loss: 4.674, Val loss: 6.698, ', 'Epoch time = 16.008s')
+('Epoch: 12 Train loss: 4.584, Val loss: 6.845, ', 'Epoch time = 15.423s')
+('Epoch: 13 Train loss: 4.491, Val loss: 6.821, ', 'Epoch time = 15.130s')
+('Epoch: 14 Train loss: 4.394, Val loss: 6.877, ', 'Epoch time = 15.069s')
+('Epoch: 15 Train loss: 4.308, Val loss: 6.914, ', 'Epoch time = 15.520s')
+('Epoch: 16 Train loss: 4.229, Val loss: 6.889, ', 'Epoch time = 15.129s')
+('Epoch: 17 Train loss: 4.159, Val loss: 6.870, ', 'Epoch time = 15.546s')
+('Epoch: 18 Train loss: 4.089, Val loss: 7.108, ', 'Epoch time = 15.595s')
+ The European Union is a matter of the European Union . 
+{'bleu': 0.004320175076702085,
+ 'brevity_penalty': 0.8851232206553534,
+ 'length_ratio': 0.8912430290894214,
+ 'precisions': [0.20431484344800926,
+                0.015092415551306564,
+                0.000917480705920449,
+                0.00020060180541624874],
+ 'reference_length': 46443,
+ 'translation_length': 41392}
+{'bleu': 0.0027142219778533033,
+ 'brevity_penalty': 0.9098291867360462,
+ 'length_ratio': 0.9136605374382009,
+ 'precisions': [0.1971220319888022,
+                0.014968336211859529,
+                0.0006655890463059808,
+                4.03298985703051e-05],
+ 'reference_length': 64119,
+ 'translation_length': 58583}
