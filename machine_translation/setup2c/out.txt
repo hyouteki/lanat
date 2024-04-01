@@ -1,0 +1,108 @@
+(venv) [abhishek@compute-0-3 setup2c]$ python fine_tuning_t5small.py
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+100%|████████████████████████████████████████████████████████████| 625/625 [01:30<00:00,  6.93it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.73it/s]
+Epoch: 1 Train loss: 1.370, Val loss: 1.256,  Epoch time = 95.461s█| 68/68 [00:08<00:00,  7.80it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:28<00:00,  7.03it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.70it/s]
+Epoch: 2 Train loss: 1.369, Val loss: 1.256,  Epoch time = 94.245s█| 68/68 [00:08<00:00,  7.77it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:29<00:00,  7.00it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.76it/s]
+Epoch: 3 Train loss: 1.370, Val loss: 1.256,  Epoch time = 94.574s█| 68/68 [00:08<00:00,  7.67it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:28<00:00,  7.05it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.76it/s]
+Epoch: 4 Train loss: 1.370, Val loss: 1.256,  Epoch time = 93.977s█| 68/68 [00:08<00:00,  7.70it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:28<00:00,  7.03it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.79it/s]
+Epoch: 5 Train loss: 1.369, Val loss: 1.256,  Epoch time = 94.187s█| 68/68 [00:08<00:00,  7.83it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:29<00:00,  7.01it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.79it/s]
+Epoch: 6 Train loss: 1.370, Val loss: 1.256,  Epoch time = 94.411s█| 68/68 [00:08<00:00,  7.82it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:29<00:00,  7.00it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.70it/s]
+Epoch: 7 Train loss: 1.370, Val loss: 1.256,  Epoch time = 94.541s█| 68/68 [00:08<00:00,  7.69it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:28<00:00,  7.03it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.77it/s]
+Epoch: 8 Train loss: 1.370, Val loss: 1.256,  Epoch time = 94.136s█| 68/68 [00:08<00:00,  7.75it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:29<00:00,  7.01it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.77it/s]
+Epoch: 9 Train loss: 1.370, Val loss: 1.256,  Epoch time = 94.466s█| 68/68 [00:08<00:00,  7.77it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:29<00:00,  7.00it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.74it/s]
+Epoch: 10 Train loss: 1.369, Val loss: 1.256,  Epoch time = 94.519s| 68/68 [00:08<00:00,  7.71it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:29<00:00,  7.00it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.76it/s]
+Epoch: 11 Train loss: 1.370, Val loss: 1.256,  Epoch time = 94.450s| 68/68 [00:08<00:00,  7.80it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:28<00:00,  7.03it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.73it/s]
+Epoch: 12 Train loss: 1.369, Val loss: 1.256,  Epoch time = 94.226s| 68/68 [00:08<00:00,  7.73it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:28<00:00,  7.03it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.77it/s]
+Epoch: 13 Train loss: 1.370, Val loss: 1.256,  Epoch time = 94.144s| 68/68 [00:08<00:00,  7.75it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:28<00:00,  7.03it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.77it/s]
+Epoch: 14 Train loss: 1.370, Val loss: 1.256,  Epoch time = 94.068s| 68/68 [00:08<00:00,  7.82it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:29<00:00,  7.02it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.76it/s]
+Epoch: 15 Train loss: 1.370, Val loss: 1.256,  Epoch time = 94.323s| 68/68 [00:08<00:00,  7.79it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:29<00:00,  7.02it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.78it/s]
+Epoch: 16 Train loss: 1.369, Val loss: 1.256,  Epoch time = 94.302s| 68/68 [00:08<00:00,  7.79it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:28<00:00,  7.04it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.79it/s]
+Epoch: 17 Train loss: 1.371, Val loss: 1.256,  Epoch time = 94.026s| 68/68 [00:08<00:00,  7.84it/s]
+100%|████████████████████████████████████████████████████████████| 625/625 [01:29<00:00,  7.01it/s]
+100%|██████████████████████████████████████████████████████████████| 68/68 [00:08<00:00,  7.78it/s]
+Epoch: 18 Train loss: 1.370, Val loss: 1.256,  Epoch time = 94.352s| 68/68 [00:08<00:00,  7.77it/s]
+Evaluating: 100%|█████████████████████████████████████████████████| 18/18 [31:06<00:00, 103.71s/it]
+
+
+
+BLEU1
+{'bleu': 0.06403704253513541, 'precisions': [0.1609566368752069], 'brevity_penalty': 0.39785276195093905, 'length_ratio': 0.5203798204250372, 'translation_length': 24168, 'reference_length': 46443}
+
+BLEU2
+{'bleu': 0.029978245555789557, 'precisions': [0.1609566368752069, 0.035274330651393244], 'brevity_penalty': 0.39785276195093905, 'length_ratio': 0.5203798204250372, 'translation_length': 24168, 'reference_length': 46443}
+
+BLEU3
+{'bleu': 0.017113454910259222, 'precisions': [0.1609566368752069, 0.035274330651393244, 0.014017749092375959], 'brevity_penalty': 0.39785276195093905, 'length_ratio': 0.5203798204250372, 'translation_length': 24168, 'reference_length': 46443}
+
+BLEU4
+{'bleu': 0.01038282663042698, 'precisions': [0.1609566368752069, 0.035274330651393244, 0.014017749092375959, 0.005828099360606575], 'brevity_penalty': 0.39785276195093905, 'length_ratio': 0.5203798204250372, 'translation_length': 24168, 'reference_length': 46443}
+[nltk_data] Downloading package wordnet to /home/abhishek/nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
+[nltk_data] Downloading package punkt to /home/abhishek/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package omw-1.4 to /home/abhishek/nltk_data...
+[nltk_data]   Package omw-1.4 is already up-to-date!
+METEOR: {'meteor': 0.07624019859797403}
+BERT avg precision: 0.753558947392574
+BERT avg recall: 0.7206737585142495
+BERT avg f1: 0.7360108809682179
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+/home/abhishek/SmartCCTV/tmp/venv/lib/python3.7/site-packages/transformers/generation/utils.py:1357: UserWarning: Using `max_length`'s default (20) to control the generation length. This behaviour is deprecated and will be removed from the config in v5 of Transformers -- we recommend using `max_new_tokens` to control the maximum length of the generation.
+  UserWarning,
+
+BLEU1
+{'bleu': 0.06847493284401475, 'precisions': [0.166814081018928], 'brevity_penalty': 0.41048652743076924, 'length_ratio': 0.5289851682028728, 'translation_length': 33918, 'reference_length': 64119}
+
+BLEU2
+{'bleu': 0.033329678287985234, 'precisions': [0.166814081018928, 0.03952134540750323], 'brevity_penalty': 0.41048652743076924, 'length_ratio': 0.5289851682028728, 'translation_length': 33918, 'reference_length': 64119}
+
+BLEU3
+{'bleu': 0.01861532293412392, 'precisions': [0.166814081018928, 0.03952134540750323, 0.014146551106654252], 'brevity_penalty': 0.41048652743076924, 'length_ratio': 0.5289851682028728, 'translation_length': 33918, 'reference_length': 64119}
+
+BLEU4
+{'bleu': 0.011121177631729635, 'precisions': [0.166814081018928, 0.03952134540750323, 0.014146551106654252, 0.0057768684558912025], 'brevity_penalty': 0.41048652743076924, 'length_ratio': 0.5289851682028728, 'translation_length': 33918, 'reference_length': 64119}
+[nltk_data] Downloading package wordnet to /home/abhishek/nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
+[nltk_data] Downloading package punkt to /home/abhishek/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package omw-1.4 to /home/abhishek/nltk_data...
+[nltk_data]   Package omw-1.4 is already up-to-date!
+METEOR: {'meteor': 0.08260783620854191}
+Warning: Empty candidate sentence detected; setting raw BERTscores to 0.
+BERT avg precision: 0.7567817964089557
+BERT avg recall: 0.7250978650948173
+BERT avg f1: 0.7398626486950614
