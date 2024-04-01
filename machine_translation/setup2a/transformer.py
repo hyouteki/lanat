@@ -144,7 +144,6 @@ def generate_square_subsequent_mask(sz):
     mask = mask.float().masked_fill(mask == 0, float('-inf')).masked_fill(mask == 1, float(0.0))
     return mask
 
-
 def create_mask(src, tgt):
     src_seq_len = src.shape[0]
     tgt_seq_len = tgt.shape[0]
