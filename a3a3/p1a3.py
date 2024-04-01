@@ -145,8 +145,10 @@ def train(epochs):
     return training_losses, validation_losses, training_pearson_corrs, validation_pearson_corrs
 
 # Train the model
-epochs = 5
+epochs = 1
 training_losses, validation_losses, training_pearson_corrs, validation_pearson_corrs = train(epochs)
+
+torch.save(model, 'model.pt')
 
 # Plot the loss and Pearson correlation
 plt.figure(figsize=(12, 6))
@@ -166,13 +168,4 @@ plt.ylabel('Pearson Correlation')
 plt.title('Pearson Correlation Plot')
 plt.legend()
 plt.tight_layout()
-plt.show()
-plt.subplot(1, 2, 2)
-plt.plot(range(epochs), training_pearson_corrs, label='Training Pearson Correlation')
-plt.plot(range(epochs), validation_pearson_corrs, label='Validation Pearson Correlation')
-plt.xlabel('Epochs')
-plt.ylabel('Pearson Correlation')
-plt.title('Pearson Correlation Plot')
-plt.legend()
-plt.tight_layout()
-plt.show()
+plt.savefig("plot.jpg")
