@@ -3,5 +3,4 @@
 - https://pytorch.org/tutorials/beginner/translation_transformer.html
 
 ## Requirements
-- torchtext
-- 
+- torchtext 

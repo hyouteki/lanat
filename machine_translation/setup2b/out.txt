@@ -1,0 +1,46 @@
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+/home/abhishek/SmartCCTV/tmp/venv/lib/python3.7/site-packages/transformers/generation/utils.py:1357: UserWarning: Using `max_length`'s default (20) to control the generation length. This behaviour is deprecated and will be removed from the config in v5 of Transformers -- we recommend using `max_new_tokens` to control the maximum length of the generation.
+  UserWarning,
+
+BLEU1
+{'bleu': 0.2661676664462372, 'precisions': [0.5953264548754129], 'brevity_penalty': 0.4470953109280848, 'length_ratio': 0.5540216900135563, 'translation_length': 24521, 'reference_length': 44260}
+
+BLEU2
+{'bleu': 0.20111319933833893, 'precisions': [0.5953264548754129, 0.3398801002147459], 'brevity_penalty': 0.4470953109280848, 'length_ratio': 0.5540216900135563, 'translation_length': 24521, 'reference_length': 44260}
+
+BLEU3
+{'bleu': 0.15829949742184973, 'precisions': [0.5953264548754129, 0.3398801002147459, 0.21935995244228673], 'brevity_penalty': 0.4470953109280848, 'length_ratio': 0.5540216900135563, 'translation_length': 24521, 'reference_length': 44260}
+
+BLEU4
+{'bleu': 0.1275631721885134, 'precisions': [0.5953264548754129, 0.3398801002147459, 0.21935995244228673, 0.14930093209054593], 'brevity_penalty': 0.4470953109280848, 'length_ratio': 0.5540216900135563, 'translation_length': 24521, 'reference_length': 44260}
+[nltk_data] Downloading package wordnet to /home/abhishek/nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
+[nltk_data] Downloading package punkt to /home/abhishek/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package omw-1.4 to /home/abhishek/nltk_data...
+[nltk_data]   Package omw-1.4 is already up-to-date!
+METEOR: {'meteor': 0.3697782590377392}
+BERT: 0.8269
+Found cached dataset wmt16 (/home/abhishek/.cache/huggingface/datasets/wmt16/de-en/1.0.0/f5dc442f4d1c2cc487cd2d5591af56c03a5f03bb98a3bb92151d015c8c9cb7ad)
+/home/abhishek/SmartCCTV/tmp/venv/lib/python3.7/site-packages/transformers/generation/utils.py:1357: UserWarning: Using `max_length`'s default (20) to control the generation length. This behaviour is deprecated and will be removed from the config in v5 of Transformers -- we recommend using `max_new_tokens` to control the maximum length of the generation.
+  UserWarning,
+
+BLEU1
+{'bleu': 0.27167469339738115, 'precisions': [0.6159426598183454], 'brevity_penalty': 0.44107140342820844, 'length_ratio': 0.5498890998739409, 'translation_length': 34461, 'reference_length': 62669}
+
+BLEU2
+{'bleu': 0.2112397095608373, 'precisions': [0.6159426598183454, 0.37238573517258916], 'brevity_penalty': 0.44107140342820844, 'length_ratio': 0.5498890998739409, 'translation_length': 34461, 'reference_length': 62669}
+
+BLEU3
+{'bleu': 0.16942337277959213, 'precisions': [0.6159426598183454, 0.37238573517258916, 0.24709271686048553], 'brevity_penalty': 0.44107140342820844, 'length_ratio': 0.5498890998739409, 'translation_length': 34461, 'reference_length': 62669}
+
+BLEU4
+{'bleu': 0.13841273518987154, 'precisions': [0.6159426598183454, 0.37238573517258916, 0.24709271686048553, 0.1711099768345832], 'brevity_penalty': 0.44107140342820844, 'length_ratio': 0.5498890998739409, 'translation_length': 34461, 'reference_length': 62669}
+[nltk_data] Downloading package wordnet to /home/abhishek/nltk_data...
+[nltk_data]   Package wordnet is already up-to-date!
+[nltk_data] Downloading package punkt to /home/abhishek/nltk_data...
+[nltk_data]   Package punkt is already up-to-date!
+[nltk_data] Downloading package omw-1.4 to /home/abhishek/nltk_data...
+[nltk_data]   Package omw-1.4 is already up-to-date!
+METEOR: {'meteor': 0.3889479564070394}
+BERT: 0.8345
