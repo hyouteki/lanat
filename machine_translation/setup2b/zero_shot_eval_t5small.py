@@ -37,9 +37,14 @@ def evaluateModel(dataIter):
         print(evaluate.load("bleu").compute(predictions=translatedSamples, references=tgtSamples,
                                             max_order=maxOrder))
     print(f"METEOR: {evaluate.load('meteor').compute(predictions=translatedSamples, references=tgtSamples)}")
-    bertPrecisions = evaluate.load("bertscore").compute(predictions=translatedSamples,
-                                                        references=tgtSamples, lang="de")["precision"]
-    print(f"BERT: {(sum(bertPrecisions)/len(bertPrecisions)):.4f}")
+    bertScores = evaluate.load("bertscore").compute(predictions=translatedSamples,
+                                                    references=tgtSamples, lang="de")
+    bertPrecisions = bertScores['precision']
+    bertRecalls = bertScores['recall']
+    bertF1s = bertScores['f1']
+    print(f"BERT avg precision: {(sum(bertPrecisions)/len(bertPrecisions))}")
+    print(f"BERT avg recall: {(sum(bertRecalls)/len(bertRecalls))}")
+    print(f"BERT avg f1: {(sum(bertF1s)/len(bertF1s))}")
 
 evaluateModel(WMT16Dataset(split="validation"))
 evaluateModel(WMT16Dataset(split="test"))
