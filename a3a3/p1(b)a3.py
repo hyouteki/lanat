@@ -19,8 +19,8 @@ print("Training Data",trainingdata)
 print("Train shape after:",trainingdata.shape)
 print("Validation Data",validata)
 print("Validation shape after:",validata.shape)
-validata = validata[pd.to_numeric(validata['score'], errors='coerce').notnull()]
-print("Validation shape after removing invalid scores:", validata.shape)
+validata=validata[pd.to_numeric(validata['score'], errors='coerce').notnull()]
+print("Validation shape after removing invalid scores:",validata.shape)
 model=SentenceTransformer('all-MiniLM-L6-v2')
 if torch.cuda.is_available():
   device=torch.device("cuda")
